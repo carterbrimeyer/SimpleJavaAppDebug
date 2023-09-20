@@ -40,9 +40,9 @@ As a result, it does not translate to the expected value.
 
 This program only works on the crypt.java file previously explained.
 In order to run this application, similar to before, you must compile it with javac and then launch it with java using these commands
-
+````
 javac debugger.java
 
 java debugger
-
+````
 it will then display its findings.
