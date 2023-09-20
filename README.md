@@ -32,7 +32,7 @@ This example command should give different outputs between the two versions of t
 The intentional bug that I introduced is when updating the encryption maps, the last char of each alphabet does not get encrypted/decrypted. 
 As a result, it does not translate to the expected value.
 
-====================================================
+
 =============== How to run Debugger ===============
 
 This program only works on the crypt.java file previously explained.
