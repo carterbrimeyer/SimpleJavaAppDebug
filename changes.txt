@@ -1,0 +1,116 @@
+@@ -19,7 +19,7 @@
+     {
+         StringBuilder noDupeInput = new StringBuilder();
+         int index = 0;
+-        for (int i = 0; i <= input.length() - 1; i++)
++        for (int i = 0; i < input.length() - 1; i++)
+         {
+             int j;
+             for (j = 0; j < i; j++) {
+@@ -42,19 +42,26 @@
+ 
+     private int encryptionLength;
+     private Hashtable<Character, Character> encryption;
++    private Hashtable<Character, Character> decryption;
+     public encrypter()
+     {
+         encryption =  new Hashtable<>();
++        decryption =  new Hashtable<>();
+         encryptionLength = alphabet.length();
+         for (int i = 0; i < alphabet.length(); i++)
+         {
+             encryption.put(alphabet.charAt(i), encryptedAlphabet.charAt(i));
++            decryption.put(encryptedAlphabet.charAt(i), alphabet.charAt(i));
+         }
+     }
+     public Hashtable<Character, Character> getEncryption()
+     {
+         return encryption;
+     }
++    public Hashtable<Character, Character> getDecryption()
++    {
++        return decryption;
++    }
+     public int length()
+     {
+         return encryptionLength;
+@@ -65,6 +72,7 @@
+         for (int i = 0; i < alphabet.length(); i++)
+         {
+             encryption.put(alphabet.charAt(i), newEncAlphabet.charAt(i));
++            decryption.put(newEncAlphabet.charAt(i), alphabet.charAt(i));
+         }
+     }
+ }
+@@ -86,7 +94,6 @@
+                     input += args[i] + " ";
+                 }
+             }
+-            input = input.trim();
+             if (checkValidInput(input))
+             {
+                 System.out.println("crypt: " + input + " ==> "+ parseInput(enc, input));
+@@ -112,22 +119,21 @@
+             case "decrypt":
+                 return decrypt(enc, params);
+             case "offset":
+-                return offset(enc, params);
++                enc.applyOffset(helper.removeDuplicateChars(input));
++                return params;
+             default:
+                 throw new Exception("ILLEGAL SYNTAX");
+         }
+     }
+     public static boolean checkValidInput(String input)
+     {
+-        if(input == null || input.equals("") || input.equals(" "))
++        String cmd = input.split(" ", 0)[0];
++        if(input == null || input.trim().equals("") || input.substring(cmd.length()).length() == 0)
+         {
+             return false;
+         }
+-        String cmd = input.split(" ", 0)[0];
+         switch(cmd)
+         {
+-            case "reset":
+-                return true;
+             case "encrypt":
+             case "decrypt":
+             case "offset":
+@@ -135,7 +141,7 @@
+             default:
+                 return false;
+         }
+-        return input.substring(cmd.length()).length() != 0;
++        return true;
+     }
+     public static String encrypt(encrypter enc, String input)
+     {
+@@ -158,15 +164,7 @@
+         for (char ch: input.toCharArray()) {
+             if(Character.isLetterOrDigit(ch))
+             {
+-                int i;
+-                for(i = 0; i < enc.length(); i++)
+-                {
+-                    if((char) enc.getEncryption().values().toArray()[i] == ch)
+-                    {
+-                        break;
+-                    }
+-                }
+-                output.append(enc.getEncryption().keySet().toArray()[i]);
++                output.append(enc.getDecryption().get(ch));
+             }
+             else
+             {
+@@ -175,9 +173,4 @@
+         }
+         return output.toString();
+     }
+-    public static String offset(encrypter enc, String input)
+-    {
+-        enc.applyOffset(helper.removeDuplicateChars(input));
+-        return input;
+-    }
+ }
+
